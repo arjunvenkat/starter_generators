@@ -1,7 +1,7 @@
 require 'rails/generators/active_record'
 require_relative './migration'
 module Starter
-  class ResourceGenerator < Rails::Generators::NamedBase
+  class BasicGenerator < Rails::Generators::NamedBase
     source_root File.expand_path('../templates', __FILE__)
     include Rails::Generators::ResourceHelpers
     include Rails::Generators::Migration
@@ -11,19 +11,19 @@ module Starter
     remove_class_option :old_style_hash
     remove_class_option :force_plural
     remove_class_option :skip_namespace
-    class_option :named_routes, :type => :boolean, :default => true
+    class_option :named_routes, :type => :boolean, :default => false
     class_option :skip_model, :type => :boolean, :default => false
     class_option :skip_controller, :type => :boolean, :default => false
     class_option :styled, :type => :boolean, :default => false, desc: 'Generates bootstrap-ready view templates'
-    class_option :dry, :type => :boolean, :default => false, desc: 'DRYs up the controller, views, and routes'
+    # class_option :dry, :type => :boolean, :default => false, desc: 'DRYs up the controller, views, and routes'
 
     def generate_controller
       return if options[:skip_controller]
-      if dry?
-        template 'dried/controller.rb', "app/controllers/#{plural_name.underscore}_controller.rb"
-      else
+      # if dry?
+        # template 'dried/controller.rb', "app/controllers/#{plural_name.underscore}_controller.rb"
+      # else
         template 'controller.rb', "app/controllers/#{plural_name.underscore}_controller.rb"
-      end
+      # end
     end
 
     def generate_model
@@ -50,13 +50,13 @@ module Starter
 
     def generate_routes
       return if options[:skip_controller]
-      if dry?
-        route "resources :#{plural_name}", "Named RESTful routes"
-      elsif named_routes?
-        route golden_7_named, "Named RESTful routes"
-      else
+      # if dry?
+        # route "resources :#{plural_name}", "Named RESTful routes"
+      # elsif named_routes?
+        # route golden_7_named, "Named RESTful routes"
+      # else
         route golden_7, "RESTful routes"
-      end
+      # end
     end
 
   protected
@@ -64,42 +64,42 @@ module Starter
     def golden_7
       ["# Routes for the #{singular_name.capitalize} resource:",
           "  # CREATE",
-          "  get '/#{plural_name}/new', controller: '#{plural_name}', action: 'new'",
-          "  post '/#{plural_name}', controller: '#{plural_name}', action: 'create'",
+          "  get '/new_#{singular_name}' => '#{plural_name}#new'",
+          "  get '/create_#{singular_name}' => '#{plural_name}#create'",
           "",
           "  # READ",
-          "  get '/#{plural_name}', controller: '#{plural_name}', action: 'index'",
-          "  get '/#{plural_name}/:id', controller: '#{plural_name}', action: 'show'",
+          "  get '/#{plural_name}' => '#{plural_name}#index'",
+          "  get '/#{plural_name}/:id' => '#{plural_name}#show'",
           "",
           "  # UPDATE",
-          "  get '/#{plural_name}/:id/edit', controller: '#{plural_name}', action: 'edit'",
-          "  patch '/#{plural_name}/:id', controller: '#{plural_name}', action: 'update'",
+          "  get '/#{plural_name}/:id/edit' => '#{plural_name}#edit'",
+          "  get '/#{plural_name}/:id/update' => '#{plural_name}#update'",
           "",
           "  # DELETE",
-          "  delete '/#{plural_name}/:id', controller: '#{plural_name}', action: 'destroy'",
+          "  get '/#{plural_name}/:id/destroy' => '#{plural_name}#destroy'",
           "  ##{'-' * 30}"
         ].join("\n")
     end
 
-    def golden_7_named
-      ["# Routes for the #{singular_name.capitalize} resource:",
-        "  # CREATE",
-        "  get '/#{plural_name}/new', controller: '#{plural_name}', action: 'new', as: 'new_#{singular_name}'",
-        "  post '/#{plural_name}', controller: '#{plural_name}', action: 'create', as: '#{plural_name}'",
-        "",
-        "  # READ",
-        "  get '/#{plural_name}', controller: '#{plural_name}', action: 'index'",
-        "  get '/#{plural_name}/:id', controller: '#{plural_name}', action: 'show', as: '#{singular_name}'",
-        "",
-        "  # UPDATE",
-        "  get '/#{plural_name}/:id/edit', controller: '#{plural_name}', action: 'edit', as: 'edit_#{singular_name}'",
-        "  patch '/#{plural_name}/:id', controller: '#{plural_name}', action: 'update'",
-        "",
-        "  # DELETE",
-        "  delete '/#{plural_name}/:id', controller: '#{plural_name}', action: 'destroy'",
-        "  ##{'-' * 30}"
-        ].join("\n")
-    end
+    # def golden_7_named
+    #   ["# Routes for the #{singular_name.capitalize} resource:",
+    #     "  # CREATE",
+    #     "  get '/#{plural_name}/new', controller: '#{plural_name}', action: 'new', as: 'new_#{singular_name}'",
+    #     "  post '/#{plural_name}', controller: '#{plural_name}', action: 'create', as: '#{plural_name}'",
+    #     "",
+    #     "  # READ",
+    #     "  get '/#{plural_name}', controller: '#{plural_name}', action: 'index'",
+    #     "  get '/#{plural_name}/:id', controller: '#{plural_name}', action: 'show', as: '#{singular_name}'",
+    #     "",
+    #     "  # UPDATE",
+    #     "  get '/#{plural_name}/:id/edit', controller: '#{plural_name}', action: 'edit', as: 'edit_#{singular_name}'",
+    #     "  patch '/#{plural_name}/:id', controller: '#{plural_name}', action: 'update'",
+    #     "",
+    #     "  # DELETE",
+    #     "  delete '/#{plural_name}/:id', controller: '#{plural_name}', action: 'destroy'",
+    #     "  ##{'-' * 30}"
+    #     ].join("\n")
+    # end
 
     def dry?
       options[:dry]

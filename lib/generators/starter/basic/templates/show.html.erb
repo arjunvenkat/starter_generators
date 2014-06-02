@@ -1,9 +1,8 @@
 <h1><%= human_name.titleize %> #<%%= @<%= singular_table_name %>.id %></h1>
 
-<dl>
 <% attributes.each do |attribute| -%>
-  <dt><%= attribute.human_name %></dt>
-  <dd><%%= @<%= singular_table_name %>.<%= attribute.name %><%= "?" if attribute.type == :boolean %> %></dd>
-
+<div>
+  <strong><%= attribute.human_name %></strong>:<br />
+  <p><%%= @<%= singular_table_name %>.<%= attribute.name %><%= "?" if attribute.type == :boolean %> %></p>
+</div>
 <% end -%>
-</dl>
