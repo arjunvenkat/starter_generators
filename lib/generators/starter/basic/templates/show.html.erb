@@ -6,3 +6,6 @@
   <p><%%= @<%= singular_table_name %>.<%= attribute.name %><%= "?" if attribute.type == :boolean %> %></p>
 </div>
 <% end -%>
+
+<a href="/<%= plural_name %>/<%%= @<%= singular_table_name %>.id %>/edit">Edit</a> |
+<a href="/<%= plural_name %>/<%%= @<%= singular_table_name %>.id %>/destroy">Destroy</a>
