@@ -25,7 +25,7 @@ class <%= plural_name.camelize %>Controller < ApplicationController
     end
 <% else -%>
     if @<%= singular_name.underscore %>.save
-      redirect_to "/<%= plural_name %>", notice: "<%= singular_name.humanize %> created successfully."
+      redirect_to "/<%= plural_name %>/#{ @<%= singular_name %>.id }", notice: "<%= singular_name.humanize %> created successfully."
     else
       render 'new'
     end
@@ -50,7 +50,7 @@ class <%= plural_name.camelize %>Controller < ApplicationController
     end
 <% else -%>
     if @<%= singular_name.underscore %>.save
-      redirect_to "/<%= plural_name %>", notice: "<%= singular_name.humanize %> updated successfully."
+      redirect_to "/<%= plural_name %>/#{ @<%= singular_name %>.id }", notice: "<%= singular_name.humanize %> updated successfully."
     else
       render 'edit'
     end

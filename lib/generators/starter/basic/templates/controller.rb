@@ -18,7 +18,7 @@ class <%= plural_name.camelize %>Controller < ApplicationController
 <% end -%>
 
     if @<%= singular_name.underscore %>.save
-      redirect_to "/<%= plural_name %>"
+      redirect_to "/<%= plural_name %>/#{ @<%= singular_name %>.id }"
     else
       render 'new'
     end
@@ -35,7 +35,7 @@ class <%= plural_name.camelize %>Controller < ApplicationController
 <% end -%>
 
     if @<%= singular_name.underscore %>.save
-      redirect_to "/<%= plural_name %>"
+      redirect_to "/<%= plural_name %>/#{ @<%= singular_name %>.id }"
     else
       render 'edit'
     end
